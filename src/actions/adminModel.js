@@ -6,8 +6,8 @@ import {
   
   import adminModelService from "../services/adminModel.service";
   
-  export const ModelAdd = (category_id,brand_id,model_name,model_desc) => (dispatch) => {
-    return adminModelService.ModelAdd(category_id,brand_id,model_name,model_desc).then(
+  export const ModelAdd = (category_id,sub_category_id,brand_id,model_name,model_desc) => (dispatch) => {
+    return adminModelService.ModelAdd(category_id,sub_category_id,brand_id,model_name,model_desc).then(
       (response) => {
         dispatch({
           type: DATA_SUCCESS,
@@ -115,8 +115,8 @@ import {
   };
   
 
-  export const ModelUpdate = (model_id,category_id,brand_id, model_name,model_desc) => (dispatch) => {
-    return adminModelService.ModelUpdate(model_id,category_id,brand_id, model_name,model_desc).then(
+  export const ModelUpdate = (model_id,category_id,sub_category_id,brand_id, model_name,model_desc) => (dispatch) => {
+    return adminModelService.ModelUpdate(model_id,category_id,sub_category_id,brand_id, model_name,model_desc).then(
       (response) => {
         dispatch({
           type: DATA_SUCCESS,

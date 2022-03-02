@@ -84,8 +84,9 @@ const DashboardUser =lazy(() =>import ('./components/user/Dashboard'));
 
 //website URLs
 const WebHome =lazy(() =>import ('./components/website/Home'));
+const WebMyAd =lazy(() =>import ('./components/website/MyAds'));
 const WebMyBid =lazy(() =>import ('./components/website/MyBids'));
-
+const WebCreateAd =lazy(() =>import ('./components/website/CreateAds'));
 // const WebHome =lazy(() =>import ('./components/website/Imageslider'));
 const WebProductInfo =lazy(() =>import ('./components/website/ProductInfo'));
 const WebLiveAuction =lazy(() =>import ('./components/website/LiveAuction'));
@@ -130,7 +131,10 @@ class App extends Component {
 
             {/*website Path*/}
             <Route exact path="/web" component={WebHome} />
+            <Route exact path="/web/myads" component={WebMyAd} />
             <Route exact path="/web/mybids" component={WebMyBid} />
+            <Route exact path="/web/createads" component={WebCreateAd} />
+            
             
             <Route exact path="/web/product/info/:product_id" component={WebProductInfo} />
             <Route exact path="/web/live_auction" component={WebLiveAuction} />

@@ -24,7 +24,7 @@ import "./../../assets/css/custom.css"
 //import "./../../App.css";
 import { CategoryList } from "./../../actions/adminCategory";
 import { SubCategoryListByCategory } from "../../actions/adminSubcategory";
-import {  BrandOfCatList } from "./../../actions/adminBrand";
+import {  SubCatBrandList} from "./../../actions/adminBrand";
 import { ModelAdd, ModelList, ModelInfo, ModelUpdate, ModelDelete } from "./../../actions/adminModel";
 
 import Header from './Header';
@@ -160,10 +160,10 @@ class Model extends Component {
         });
       });
   }
-  ListBrandFun=(cat_id)=>{
+  ListBrandFun=(subcat_id)=>{
 console.log("now brandlist ")
     const { dispatch, history } = this.props;
-    dispatch(BrandOfCatList(cat_id))
+    dispatch(SubCatBrandList(subcat_id))
       .then((response) => {
         console.log("brand list now ")
         console.log(response.data)
@@ -283,7 +283,7 @@ console.log("now brandlist ")
     const { dispatch, history } = this.props;
 
     if (this.checkBtn.context._errors.length === 0) {
-      dispatch(ModelAdd(this.state.category_id,this.state.brand_id,this.state.model_name,this.state.model_desc))
+      dispatch(ModelAdd(this.state.category_id,this.state.sub_category_id,this.state.brand_id,this.state.model_name,this.state.model_desc))
         .then((response) => {
             if(response.success || response.success ==="true" || response.success ===true){
               toast.success(response.message, {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeonClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
@@ -357,7 +357,7 @@ console.log("now brandlist ")
     const { dispatch, history } = this.props;
 
     if (this.checkUpdateBtn.context._errors.length === 0) {
-      dispatch(ModelUpdate(this.state.model_id, this.state.edit_category_id,this.state.brand_id, this.state.edit_model_name, this.state.edit_model_desc))
+      dispatch(ModelUpdate(this.state.model_id, this.state.edit_category_id,this.state.edit_sub_category_id,this.state.brand_id, this.state.edit_model_name, this.state.edit_model_desc))
         .then((response) => {
             if(response.success || response.success ==="true" || response.success ===true){
               toast.success(response.message, {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeonClick: true, pauseOnHover: true, draggable: true, progress: undefined, });

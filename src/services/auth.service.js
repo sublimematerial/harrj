@@ -9,9 +9,10 @@ class AuthService {
     const insertData = new FormData();
     insertData.set('email_id', email_id);
     insertData.set('password', password);
-
+//loginadmin
     return axios
-      .post(API_URL + "login", insertData )
+    //  .post(API_URL + "login", insertData )
+    .post(API_URL + "login/loginadmin", insertData )
       .then((response) => {
         console.log("loging resp")
         console.log(response)
@@ -45,7 +46,21 @@ class AuthService {
     //     return response.data;
     //   });
   }
-  
+  register(name,mobile_no,email_id,password) {
+    const insertData = new FormData();
+    insertData.set('name', name);
+    insertData.set('email_id', email_id);
+    insertData.set('mobile_no', mobile_no);
+    insertData.set('role', "customer");
+    insertData.set('password', password);
+
+    
+    return axios
+      .post(API_URL + "register", insertData)
+      .then((response) => {
+        return response.data;
+      });
+  }
   UserLoginOtp(mobile_no) {
     return axios
       .post(API_URL + "api/admin/login", { mobile_no })

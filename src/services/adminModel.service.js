@@ -4,9 +4,10 @@ import authHeader from "./auth-header";
 const API_URL = process.env.REACT_APP_API_URL;
 
 class modelService {
-  ModelAdd(category_id,brand_id,model_name,model_desc) {
+  ModelAdd(category_id,sub_category_id,brand_id,model_name,model_desc) {
     const insertData = new FormData();
     insertData.set('category_id', category_id);
+    insertData.set('sub_category_id', sub_category_id);
     insertData.set('brand_id', brand_id);
     insertData.set('model_name', model_name);
     insertData.set('model_desc', model_desc);
@@ -34,10 +35,11 @@ class modelService {
       });
   }
 
-  ModelUpdate(model_id,category_id,brand_id, model_name,model_desc) {
+  ModelUpdate(model_id,category_id,sub_category_id,brand_id, model_name,model_desc) {
     const updateData = new FormData();
     updateData.set('model_id', model_id);
     updateData.set('category_id', category_id);
+    updateData.set('sub_category_id', sub_category_id);
     updateData.set('brand_id', brand_id);
     updateData.set('model_name', model_name);
     updateData.set('model_desc', model_desc);

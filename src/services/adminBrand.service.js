@@ -36,6 +36,16 @@ BrandOfCatList(category_id){
   });
  
 }
+SubCatBrandList(subcategory_id) {
+  const insertData = new FormData();
+
+  insertData.set('sub_category_id', subcategory_id);
+  return axios
+    .post(API_URL + "admin/brand/subcat_brand_list",insertData)
+    .then((response) => {
+      return response.data;
+    });
+}
 BrandModelLst(brand_id){
   const insertData = new FormData();
  

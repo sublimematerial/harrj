@@ -157,6 +157,79 @@ export const CategoryList = () => (dispatch) => {
   );
 };
 
+export const SubCategoryListByCategory = (category_id) => (dispatch) => {
+  return homeService.SubCategoryListByCategory(category_id).then(
+    (response) => {
+      dispatch({
+        type: DATA_SUCCESS,
+      });
+
+      dispatch({
+        type: SET_MESSAGE,
+        payload: response.data.message,
+      });
+
+      return Promise.resolve(response);
+    },
+    (error) => {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      dispatch({
+        type: DATA_FAIL,
+      });
+
+      dispatch({
+        type: SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const SubCatBrandList = (category_id) => (dispatch) => {
+  return homeService.SubCatBrandList(category_id).then(
+    (response) => {
+      dispatch({
+        type: DATA_SUCCESS,
+      });
+
+      dispatch({
+        type: SET_MESSAGE,
+        payload: response.data.message,
+      });
+
+      return Promise.resolve(response);
+    },
+    (error) => {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      dispatch({
+        type: DATA_FAIL,
+      });
+
+      dispatch({
+        type: SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+
 export const SubCategoryList = (category_id) => (dispatch) => {
   return homeService.SubCategoryList(category_id).then(
     (response) => {
@@ -193,6 +266,43 @@ export const SubCategoryList = (category_id) => (dispatch) => {
   );
 };
 
+export const ProductAdd= (title,name,description,keywords,category_id,sub_category_id,brand_id,model_id,country_id,city_id,start_date_time,end_date_time,
+  auction_type,starting_price,high_price,final_price,refund,refund_days,youtube_link,product_img,video,start_time,end_time) => (dispatch) => {
+  return homeService.ProductAdd(title,name,description,keywords,category_id,sub_category_id,brand_id,model_id,country_id,city_id,start_date_time,end_date_time,
+    auction_type,starting_price,high_price,final_price,refund,refund_days,youtube_link,product_img,video,start_time,end_time).then(
+    (response) => {
+      dispatch({
+        type: DATA_SUCCESS,
+      });
+
+      dispatch({
+        type: SET_MESSAGE,
+        payload: response.data.message,
+      });
+
+      return Promise.resolve(response);
+    },
+    (error) => {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      dispatch({
+        type: DATA_FAIL,
+      });
+
+      dispatch({
+        type: SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
 
 export const ProductList = (auction_type) => (dispatch) => {
   return homeService.ProductList(auction_type).then(

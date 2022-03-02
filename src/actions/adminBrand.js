@@ -111,6 +111,41 @@ import {
       }
     );
   };
+  export const SubCatBrandList= (sub_cat_id) => (dispatch) => {
+    return adminBrandService.SubCatBrandList(sub_cat_id).then(
+      (response) => {
+        dispatch({
+          type: DATA_SUCCESS,
+        });
+  
+        dispatch({
+          type: SET_MESSAGE,
+          payload: response.data.message,
+        });
+  
+        return Promise.resolve(response);
+      },
+      (error) => {
+        const message =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+  
+        dispatch({
+          type: DATA_FAIL,
+        });
+  
+        dispatch({
+          type: SET_MESSAGE,
+          payload: message,
+        });
+  
+        return Promise.reject();
+      }
+    );
+  };
   export const BrandOfCatList = (cat_id) => (dispatch) => {
     return adminBrandService.BrandOfCatList(cat_id).then(
       (response) => {

@@ -27,7 +27,7 @@ import Rectangle from './../../assets/website/img/livebid/Rectangle-294.svg';
 import user_icon from './../../assets/website/img/livebid/user_icon.svg';
 
 
-import { AdminLogin } from "./../../actions/auth";
+import { AdminLogin,register } from "./../../actions/auth";
 import {toast} from 'react-toastify';
 class Header extends Component {
 
@@ -37,8 +37,12 @@ class Header extends Component {
     this.onChangeEmailID = this.onChangeEmailID.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onChangeMobile=this.onChangeMobile.bind(this);
+    this.onChangeName=this.onChangeName.bind(this);
+    this.onChangeRegiserMobile=this.onChangeRegiserMobile.bind(this);
+   this.onChangeRegisterEmailID=this.onChangeRegisterEmailID.bind(this);
+   this.onChangeRegisterPassword=this.onChangeRegisterPassword.bind(this);
     this.state = { showPopup: false ,email_id:"",
-    password:"", mobile_no:""};
+    password:"", mobile_no:"",name:"",register_email_id:"",register_mobile_no:"",register_password:""};
 
     history.listen((location) => {
       props.dispatch(clearMessage()); // clear message when changing location
@@ -71,6 +75,26 @@ class Header extends Component {
   onChangePassword(e) {
     this.setState({
       password: e.target.value,
+    });
+  }
+  onChangeName(e) {
+    this.setState({
+      name: e.target.value,
+    });
+  }
+  onChangeRegiserMobile(e) {
+    this.setState({
+      register_mobile_no: e.target.value,
+    });
+  }
+  onChangeRegisterEmailID(e) {
+    this.setState({
+      register_email_id: e.target.value,
+    });
+  }
+  onChangeRegisterPassword(e) {
+    this.setState({
+      register_password: e.target.value,
     });
   }
   onChangeMobile(e) {
@@ -128,6 +152,30 @@ console.log("submit btuon")
     this.setState({
       loading: true,
     });
+    const { dispatch, history } = this.props;
+
+    if (this.checkBtn.context._errors.length === 0) {
+      dispatch(register(this.state.name, this.state.register_mobile_no,this.state.register_email_id   ,this.state.register_password   ))
+        .then((response) => {
+         
+          if(response.success || response.success ==="true" || response.success ===true){
+            toast.success('successful..!', {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
+            this.setState({
+              showPopup: true
+            });
+            $('#popuplogin').modal('hide')
+        }else{
+          toast.error(response.message, {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeonClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
+        }
+        })
+        .catch(() => {
+         
+          toast.error("something went wrong..!!", {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
+        });
+    } else {
+      
+      toast.error("something went wrong..!!", {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
+    }
 
    
 	$('#popupregister').modal('hide');
@@ -139,7 +187,16 @@ console.log("submit btuon")
     $('#popupregister').modal('show')
   }
 showLogin =(e) =>{
+  // localStorage.removeItem("userId")
   $('#popuplogin').modal('show')
+}
+showLogout=(e) =>{
+  localStorage.removeItem("userId")
+  this.setState({
+    showPopup: false,
+  });
+
+ // $('#popuplogin').modal('show')
 }
   render() {
 
@@ -171,21 +228,27 @@ showLogin =(e) =>{
 										<li><a href="/web/normal_auction"><img src={Rectangle}/> NORMAL ADS </a></li>
 										{this.state.showPopup ===true? (
                      <>
-                    <li><a href="/web/mybids"><img src={Rectangle}/> MY ADS </a></li>
-										<li><a href="#"><img src={Rectangle}/>MY BIDS </a></li>
-                    <a href="javascript:void(0)" onClick={this.showRegister	} >Log Out</a> 
+                     <li><a href="/web/myads"><img src={Rectangle}/> MY ADS </a></li>
+										<li><a href="/web/mybids"><img src={Rectangle}/>MY BIDS </a></li>
                     </>
-                    ):(		 <div className="signup-btn">
-										<a href="javascript:void(0)" onClick={this.showLogin	} >E-SERVICES LOGIN</a>
-										<a href="javascript:void(0)" onClick={this.showRegister	} >SIGN UP</a> 
-									</div> 
+                    ):(null
                     
                     )}
                     <li><a href="#"><img src={user_icon}/> CONTACT </a></li>
                                        </ul>
 									</nav>
-							
-								
+                  {this.state.showPopup ===false? (
+                     <>
+									 <div className="signup-btn">
+										<a href="javascript:void(0)" onClick={this.showLogin	} >E-SERVICES LOGIN</a>
+										<a href="javascript:void(0)" onClick={this.showRegister	} >SIGN UP</a> 
+									</div> 
+                  </>
+                    ):(
+                      <div className="signup-btn">
+                    	<a href="javascript:void(0)" onClick={this.showLogout	} >LOGOUT</a>
+                    </div>
+                    )}
    
 								</div>
 								
@@ -197,6 +260,10 @@ showLogin =(e) =>{
 	<div className="modal fade" id="createad" data-keyboard="false" data-backdrop="static">
     <div className="modal-dialog modal-dialog-centered modal-sm">
       <div className="modal-content">
+      <div className="modal-header border-0 pb-0">
+          <button type="button" className="close" data-dismiss="modal">&times;</button>
+        </div>
+
 	  <Form onSubmit={this.handleSubmit} ref={(c) => { this.Addform = c; }}>
         <div className="modal-header border-0 pb-0">
 			 <input type="text" className="form-control" placeholder="Mobile Number" required />
@@ -212,6 +279,10 @@ showLogin =(e) =>{
     <div className="modal fade" id="popuplogin" data-keyboard="false" data-backdrop="static">
     <div className="modal-dialog modal-dialog-centered modal-sm">
       <div className="modal-content">
+      <div className="modal-header border-0 pb-0">
+          <button type="button" className="close" data-dismiss="modal">&times;</button>
+        </div>
+
       <Form onSubmit={this.handleLoginSubmit} >
                       <div className="form-group">
                         <label>Email</label>
@@ -258,19 +329,22 @@ showLogin =(e) =>{
     <div className="modal fade" id="popupregister" data-keyboard="false" data-backdrop="static">
     <div className="modal-dialog modal-dialog-centered modal-sm">
       <div className="modal-content">
+      <div className="modal-header border-0 pb-0">
+          <button type="button" className="close" data-dismiss="modal">&times;</button>
+        </div>
       <Form onSubmit={this.handleRegisterSubmit}  >
                       <div className="form-group">
                         <label>Full Name</label>
-                        <input className="form-control" type="text" value={this.state.fullname} onChange={this.onChangeEmailID}/>
+                        <input className="form-control" type="text" value={this.state.name} onChange={this.onChangeName} required/>
                       </div>
 
                       <div className="form-group">
                         <label>Mobile</label>
-                        <input className="form-control" type="number" value={this.state.mobile_no} onChange={this.onChangeMobile} />
+                        <input className="form-control" type="number" value={this.state.register_mobile_no} onChange={this.onChangeRegiserMobile} required />
                       </div>
                       <div className="form-group">
                         <label>Email</label>
-                        <input className="form-control" type="email" onChange={this.onChangeEmailID}/>
+                        <input className="form-control" type="email" value={this.state.register_email_id} onChange={this.onChangeRegisterEmailID} required/>
                       </div>
                       <div className="form-group">
                         <div className="row">
@@ -283,7 +357,7 @@ showLogin =(e) =>{
                             </a>
                           </div>*/}
                         </div>
-                        <input className="form-control" type="password" onChange={this.onChangePassword}/>
+                        <input className="form-control" type="password" value={this.state.register_password} onChange={this.onChangeRegisterPassword} required/>
                       </div>
                       <div className="form-group text-center">
                         <button className="btn btn-primary account-btn" type="submit">Register</button>
@@ -316,4 +390,10 @@ function mapStateToProps(state) {
   const { isLoggedIn } = state.auth;
   const { message } = state.message;
   return {
-    us
+    user,
+    isLoggedIn,
+    message
+  };
+}
+
+export default connect(mapStateToProps)(Header);

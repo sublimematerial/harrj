@@ -204,9 +204,18 @@ class NormalAuction extends Component {
   }
 
   togglePopup() {
-		this.setState({
-		  showPopup: !this.state.showPopup
-		});
+		var lang
+		lang = localStorage.getItem("userId");
+		console.log("value of lang is")
+		console.log(lang)
+		if(lang!=null){
+			let path = `/web/createads`; 
+			history.push(path);
+		}else{
+			$('#popuplogin').modal('show');
+		}
+	
+		
 	  }
    ListNormalAuctionFun=()=>{
 

@@ -127,7 +127,7 @@ if(event.target.checked){
 		this.setState({
 		category_id: [...this.state.category_id, event.target.id]
 	}, () => {
-		
+		this.ListSubCategoryFun()
 		this.ListBrandFun();
 		this.ListLiveAuctionFun();
 	});
@@ -329,8 +329,11 @@ if(event.target.checked){
 	});
   }
   handleExpandCollaps = (name) => {
+	  console.log("colla clicked")
+	  console.log(name)
    
     if (this.state.activeCollapse === name) {
+		console.log("value same")
       this.setState({ activeCollapse: '' })
 	  if(name==="categories"){
 		this.setState({ subcatactiveCollapse: false })
@@ -382,7 +385,7 @@ if(event.target.checked){
    ListSubCategoryFun=(category_id)=>{
 
     const { dispatch, history } = this.props;
-    dispatch(SubCategoryList(category_id))
+    dispatch(SubCategoryList(this.state.category_id))
       .then((response) => {
         this.setState({
           listSubCategoryData: response.data
@@ -428,10 +431,11 @@ ListModelFun =() =>{
 
 }
     ListCategoryFun=()=>{
-
+console.log("list cat")
     const { dispatch, history } = this.props;
     dispatch(CategoryList())
       .then((response) => {
+		  console.log(response.data)
         this.setState({
           listCategoryData: response.data
         });
@@ -552,18 +556,18 @@ ListModelFun =() =>{
 							    <li><a href="javascript:void(0)" onClick={() => this.setState({subcatactiveCollapse: !this.state.subcatactiveCollapse})}>Sub Categories <i className="fa fa-chevron-down"></i></a>
             <div id='categories' style={{ display: this.state.activeCollapse ==='categories' && this.state.subcatactiveCollapse===true  ? 'block' : 'none'  }}>
               <ul>
-			  {this.state.listCategoryData && typeof this.state.listCategoryData !=="undefined" & this.state.listCategoryData.length > 0 && this.state.listCategoryData.map((itemTaskList,m) => (
+			  {this.state.listSubCategoryData && typeof this.state.listSubCategoryData !=="undefined" & this.state.listSubCategoryData.length > 0 && this.state.listSubCategoryData.map((itemTaskList,m) => (
 							  <li>
 								  
 								  <Checkbox
-							  id={itemTaskList.category_id}
+							  id={itemTaskList.sub_category_id}
               icon={icon}
               checkedIcon={checkedIcon}
               style={{ marginRight: 8 }}
 			  selectedId={this.state.selected}
               
 			  onChange = {this.onChangeSubCategory}
-            />{itemTaskList.category_name}
+            />{itemTaskList.sub_category_name}
 							
 							  </li>
 							   ))}
