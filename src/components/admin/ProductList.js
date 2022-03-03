@@ -24,7 +24,7 @@ import "./../../assets/css/custom.css"
 //import "./../../App.css";
 
 import { CategoryList } from "./../../actions/adminCategory";
-import {  BrandModelLst, BrandOfCatList } from "./../../actions/adminBrand";
+import {  BrandModelLst, SubCatBrandList } from "./../../actions/adminBrand";
 import {CountryList,CountryCityList} from "./../../actions/adminCountry";
 import { SubCategoryListByCategory } from "./../../actions/adminSubcategory";
 
@@ -46,11 +46,13 @@ class Dashboard extends Component {
     this.TableDataUpdate = this.TableDataUpdate.bind(this);
 
     this.ListCategoryFun = this.ListCategoryFun.bind(this);
+    this.ListSubCategoryFun=this.ListSubCategoryFun.bind(this);
     this.ListBrandFun = this.ListBrandFun.bind(this);
     this.ListModelFun = this.ListModelFun.bind(this);
     this.ListCountryFun = this.ListCountryFun.bind(this);
     this.ListCityFun = this.ListCityFun.bind(this);
     this.ListProductFun = this.ListProductFun.bind(this);
+    this.ListYearFun = this.ListYearFun.bind(this);
 
     this.handleDeleteConfirm = this.handleDeleteConfirm.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -61,6 +63,7 @@ class Dashboard extends Component {
     this.onChangeCountry = this.onChangeCountry.bind(this);
     this.onChangeCity = this.onChangeCity.bind(this);
     this.onChangeSubCategory = this.onChangeSubCategory.bind(this);
+
     this.handleSubmit = this.handleSubmit.bind(this);
 
 
@@ -74,11 +77,13 @@ class Dashboard extends Component {
 
     this.state = {
         listCategoryData: [],
+        listSubCategoryData:[],
         listBrandData:[],
         listModelData:[],
         listCountryData:[],
         listCityData:[],
         listProductData: [],
+        listYearData:[],
 
         addProductList : [],
 
@@ -200,10 +205,10 @@ class Dashboard extends Component {
         });
       });
   }
-  ListBrandFun=(category_id)=>{
+  ListBrandFun=(subcategory_id)=>{
 
     const { dispatch, history } = this.props;
-    dispatch(BrandOfCatList(category_id))
+    dispatch(SubCatBrandList(subcategory_id))
       .then((response) => {
         this.setState({
           listBrandData: response.data
@@ -278,6 +283,22 @@ console.log("city list called")
       });
   }
 
+  ListYearFun=()=>{
+
+    const { dispatch, history } = this.props;
+    dispatch(ProductList())
+      .then((response) => {
+        this.setState({
+          listYearData: response.data
+        });
+        this.TableDataUpdate();
+      })
+      .catch(() => {
+        this.setState({
+          listYearData: []
+        });
+      });
+  }
   ListProductFun=()=>{
 
     const { dispatch, history } = this.props;
@@ -346,8 +367,12 @@ console.log("city list called")
 var catid=e.target.value
     this.setState({
       category_id: e.target.value,
+      listSubCategoryData:[],
+      listBrandData:[],
+      listModelData:[],
     }, () => {
-      this.ListBrandFun(catid);
+      // this.ListBrandFun(catid);
+      this.ListSubCategoryFun(catid)
   });
   
   }
@@ -382,10 +407,13 @@ var catid=e.target.value
    
   }
   onChangeSubCategory=(e)=>{
+    var subcatid=e.target.value
     this.setState({
       sub_category_id: e.target.value,
-    });
-  }
+    }, () => {
+      this.ListBrandFun(subcatid);
+  });
+}
   onChangeStartDateTime=(e)=>{
     this.setState({
       start_date_time: e.target.value,
@@ -502,6 +530,8 @@ onChangeVideo=(e)=>{
     this.setState({ addProductList: array });
   }
 
+  
+
   handleRemoveProduct=(tmidx)=>{
     $("#add_pro_div_"+tmidx).remove();
     /*var array = this.state.addProductList;
@@ -591,6 +621,7 @@ console.log(response.data)
               edit_description:response.data[0].description,
               edit_keywords:response.data[0].keywords,
               edit_category_id:response.data[0].category_id,
+              edit_sub_category_id:response.data[0].sub_category_id,
               edit_brand_id:response.data[0].brand_id,
               edit_country_id:response.data[0].country_id,
               edit_city_id:response.data[0].city_id,
@@ -612,7 +643,8 @@ console.log(response.data)
               edit_product_view_img:response.data[0].product_img,
             }, () => {
               this.ListCityFun(response.data[0].country_id)
-              this.ListBrandFun(response.data[0].category_id);
+              this.ListSubCategoryFun(response.data[0].category_id)
+              this.ListBrandFun(response.data[0].sub_category_id);
               this.ListModelFun(response.data[0].brand_id);
               // this.listModelFun(response.data[0].brand_id)
           });
@@ -654,10 +686,11 @@ console.log(response.data)
     this.setState({
       edit_category_id: e.target.value,
     }, () => {
-      this.ListBrandFun(catid);
+      this.ListSubCategoryFun(catid);
   });
     
   }
+ 
   onchangeEditCity=(e)=>{
     this.setState({
       edit_city_id: e.target.value,
@@ -687,7 +720,7 @@ console.log(response.data)
     this.setState({
       edit_model_id: e.target.value,
     });
-    this.ListSubCategoryFun(e.target.value);
+    // this.ListSubCategoryFun(e.target.value);
   }
   onChangeEditSubCategory=(e)=>{
     this.setState({
@@ -955,6 +988,17 @@ console.log(this.state.edit_end_date_time)
                           </div>
                           <div class="col-sm-3">
                             <div className="form-group">
+                              <label>Sub Category:</label>
+                              <select className="form-control" placeholder="Brand" id="brand_id" name="brand_id" value={this.state.sub_category_id} onChange={this.onChangeSubCategory} required >
+                                  <option value="">Select Sub Category</option>
+                                  {this.state.listSubCategoryData && typeof this.state.listSubCategoryData !=="undefined" & this.state.listSubCategoryData.length > 0 && this.state.listSubCategoryData.map((itemTaskList,m) => (
+                                    <option value={itemTaskList.sub_category_id}>{itemTaskList.sub_category_name}</option>
+                                  ))}
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-sm-3">
+                            <div className="form-group">
                               <label>Brand:</label>
                               <select className="form-control" placeholder="Brand" id="brand_id" name="brand_id" value={this.state.brand_id} onChange={this.onChangeBrand} required >
                                   <option value="">Select Brand</option>
@@ -975,7 +1019,11 @@ console.log(this.state.edit_end_date_time)
                               </select>
                             </div>
                           </div>
-                          <div class="col-sm-3">
+                     
+                   
+                  </div>
+                        <div class="row">
+                        <div class="col-sm-3">
                             <div className="form-group">
                                 <label>Auction Type:</label>
                                  <select className="form-control" placeholder="Auction Type" id="auction_type" name="auction_type" value={this.state.auction_type} onChange={this.onChangeAuctionType} required >
@@ -985,10 +1033,6 @@ console.log(this.state.edit_end_date_time)
                               </select>
                                </div>
                           </div>
-                   
-                  </div>
-                        <div class="row">
-                     
                           <div class="col-sm-3">
                             <div className="form-group">
                                 <label>Price:</label>
@@ -1013,7 +1057,7 @@ console.log(this.state.edit_end_date_time)
                                 <input type="text" className="form-control" placeholder="Keywords" id="keywords" name="keywords" value={this.state.keywords} onChange={this.onChangeKeywords} required />
                             </div>
                           </div>
-                          <div class="col-sm-3">
+                          {/* <div class="col-sm-3">
                             <div className="form-group">
                                 <label>Refund:</label>
                                  <select className="form-control" placeholder="Refund" id="refund" name="refund" value={this.state.refund} onChange={this.onChangeRefund} required >
@@ -1021,26 +1065,42 @@ console.log(this.state.edit_end_date_time)
                                    <option value="yes">Yes</option>
                               </select>
                             </div>
-                          </div>
-                          <div class="col-sm-3">
+                          </div> */}
+                          {/* <div class="col-sm-3">
                             <div className="form-group">
                                 <label>Refund Days:</label>
                                 <input type="number" className="form-control" placeholder="Refund Days" id="refund_days" name="refund_days" value={this.state.refund_days} onChange={this.onChangeRefundDays} required />
                             </div>
                             </div>
+                         */}
                         
+                            {1===1? (
+                            <div class="col-sm-3">
+                            <div className="form-group">
+                                <label>Year:</label>
+                                {/* <input type="file" className="form-control add_video" id="video" name="video" onChange={this.onChangeVideo} required /> */}
+                                <select className="form-control" placeholder="Model" id="model_id" name="model_id" value={this.state.model_id} onChange={this.onChangeModel} required >
+                                  <option value="">Select year</option>
+                                  {this.state.listModelData && typeof this.state.listModelData !=="undefined" & this.state.listModelData.length > 0 && this.state.listModelData.map((itemTaskList,m) => (
+                                    <option value={itemTaskList.model_id}>{itemTaskList.model_name}</option>
+                                  ))}
+                              </select>
+                            </div>
+                            </div>
+                            ):(null)
+                                  }
                        </div>
 
                         <div class="row">
                       
                        
-                   
-                            <div class="col-sm-3">
+                        <div class="col-sm-3">
                             <div className="form-group">
                                 <label>Video:</label>
                                 <input type="file" className="form-control add_video" id="video" name="video" onChange={this.onChangeVideo} required />
                             </div>
                             </div>
+                           
                             <div class="col-sm-3">
                             <div className="form-group">
                                 <label>Start Date:</label>
@@ -1188,7 +1248,7 @@ console.log(this.state.edit_end_date_time)
                           </div> */}
                           <div class="col-sm-3">
                             <div className="form-group">
-                              <label>Country11:</label>
+                              <label>Country:</label>
                               <select className="form-control" placeholder="Country" id="Country_id" name="edit_Country_id" value={this.state.edit_country_id} onChange={this.onchangeEditCountry}  >
                                   <option value="">Select Country</option>
                                   {this.state.listCountryData && typeof this.state.listCountryData !=="undefined" & this.state.listCountryData.length > 0 && this.state.listCountryData.map((itemTaskList,m) => (
@@ -1199,7 +1259,7 @@ console.log(this.state.edit_end_date_time)
                           </div>
                           <div class="col-sm-3">
                             <div className="form-group">
-                              <label>Cityedit:</label>
+                              <label>City:</label>
                               <select className="form-control" placeholder="City" id="City_id" name="City_id" value={this.state.edit_city_id} onChange={this.onchangeEditCity} required >
                                   <option value="">Select City</option>
                                   {this.state.listCityData && typeof this.state.listCityData !=="undefined" & this.state.listCityData.length > 0 && this.state.listCityData.map((itemTaskList,m) => (
@@ -1216,6 +1276,17 @@ console.log(this.state.edit_end_date_time)
                               <select className="form-control" placeholder="Category" id="category_id" name="edit_category_id" value={this.state.edit_category_id} onChange={this.onChangeEditCategory} required >
                                   <option value="">Select Category</option>
                                   {this.state.listCategoryData && typeof this.state.listCategoryData !=="undefined" & this.state.listCategoryData.length > 0 && this.state.listCategoryData.map((itemTaskList,m) => (
+                                    <option value={itemTaskList.category_id}>{itemTaskList.category_name}</option>
+                                  ))}
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-sm-3">
+                            <div className="form-group">
+                              <label>Sub Category:</label>
+                              <select className="form-control" placeholder="Category" id="category_id" name="edit_category_id" value={this.state.edit_category_id} onChange={this.onChangeEditSubCategory} required >
+                                  <option value="">Select Sub Category</option>
+                                  {this.state.listSubCategoryData && typeof this.state.listSubCategoryData !=="undefined" & this.state.listSubCategoryData.length > 0 && this.state.listSubCategoryData.map((itemTaskList,m) => (
                                     <option value={itemTaskList.category_id}>{itemTaskList.category_name}</option>
                                   ))}
                               </select>

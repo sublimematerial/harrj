@@ -32,6 +32,7 @@ const CityList =lazy(() =>import ('./components/admin/CityList'));
 const ProductList =lazy(() =>import ('./components/admin/ProductList'));
 const ClientList =lazy(() =>import ('./components/admin/ClientList'));
 const UserList =lazy(() =>import ('./components/admin/UserList'));
+const YearList =lazy(() =>import ('./components/admin/Year'));
 
 
 
@@ -124,8 +125,10 @@ class App extends Component {
             <Route exact path="/admin/product/list" component={ProductList} />
             <Route exact path="/admin/client/list" component={ClientList} />
             <Route exact path="/admin/user/list" component={UserList} />
+            <Route exact path="/admin/year" component={YearList} />
+            
 
-
+            
 
 
 

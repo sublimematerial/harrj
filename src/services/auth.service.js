@@ -21,7 +21,7 @@ class AuthService {
           console.log("auth token")
           console.log(JSON.stringify(response.data))
           localStorage.setItem("user", JSON.stringify(response.data));
-          localStorage.setItem("userId", JSON.stringify(response.data));
+        
         }else{
           localStorage.removeItem("user");
         }  
@@ -46,21 +46,7 @@ class AuthService {
     //     return response.data;
     //   });
   }
-  register(name,mobile_no,email_id,password) {
-    const insertData = new FormData();
-    insertData.set('name', name);
-    insertData.set('email_id', email_id);
-    insertData.set('mobile_no', mobile_no);
-    insertData.set('role', "customer");
-    insertData.set('password', password);
-
-    
-    return axios
-      .post(API_URL + "register", insertData)
-      .then((response) => {
-        return response.data;
-      });
-  }
+  
   UserLoginOtp(mobile_no) {
     return axios
       .post(API_URL + "api/admin/login", { mobile_no })

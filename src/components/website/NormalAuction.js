@@ -377,7 +377,7 @@ class NormalAuction extends Component {
      { this.state.listNormalAuctionData && typeof this.state.listNormalAuctionData !=="undefined" & this.state.listNormalAuctionData.length > 0 && this.state.listNormalAuctionData.map((itemNormalAuctionList,l) => (
 			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
 				<div class="live-bid-content bid-new">
-					<a href="#">
+					<a href={"/web/product/info/" + itemNormalAuctionList.product_id}>
 						<img src={itemNormalAuctionList.product_img}/>
 					</a>
 					<div class="live">

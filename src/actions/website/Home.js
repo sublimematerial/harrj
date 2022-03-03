@@ -6,6 +6,77 @@ import {
 
 import homeService from "../../services/website/Home.service";
 
+export const UserLogin= (email_id, mobile_no, password) => (dispatch) => {
+  return homeService.UserLogin(email_id, mobile_no, password).then(
+    (response) => {
+      dispatch({
+        type: DATA_SUCCESS,
+      });
+
+      dispatch({
+        type: SET_MESSAGE,
+        payload: response.data.message,
+      });
+
+      return Promise.resolve(response);
+    },
+    (error) => {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      dispatch({
+        type: DATA_FAIL,
+      });
+
+      dispatch({
+        type: SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+export const register = (name,mobile_no,email_id,password) => (dispatch) => {
+  return homeService.register(name,mobile_no,email_id,password).then(
+    (response) => {
+      dispatch({
+        type: DATA_SUCCESS,
+      });
+
+      dispatch({
+        type: SET_MESSAGE,
+        payload: response.data.message,
+      });
+
+      return Promise.resolve(response);
+    },
+    (error) => {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      dispatch({
+        type: DATA_FAIL,
+      });
+
+      dispatch({
+        type: SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
 
 export const BannerList = () => (dispatch) => {
   return homeService.BannerList().then(

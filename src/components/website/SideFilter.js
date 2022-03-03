@@ -435,6 +435,7 @@ console.log("list cat")
     const { dispatch, history } = this.props;
     dispatch(CategoryList())
       .then((response) => {
+		console.log("list cat in")
 		  console.log(response.data)
         this.setState({
           listCategoryData: response.data
@@ -538,6 +539,9 @@ console.log("list cat")
 					  <li><a href="javascript:void(0)" onClick={() => this.handleExpandCollaps("categories")}>Categories <i className="fa fa-chevron-down"></i></a>
             <div id='categories' style={{ display: this.state.activeCollapse ==='categories' ? 'block' : 'none'  }}>
               <ul>
+			  {/* {(() => {
+			 if(this.state.listCategoryData && typeof this.state.listCategoryData !=="undefined" & this.state.listCategoryData.length > 0){ */}
+				
 			  {this.state.listCategoryData && typeof this.state.listCategoryData !=="undefined" & this.state.listCategoryData.length > 0 && this.state.listCategoryData.map((itemTaskList,m) => (
 							  <li>
 								  
@@ -553,9 +557,16 @@ console.log("list cat")
 							
 							  </li>
 							   ))}
+				{/* // 			   </span>
+				// )
+			  }
+			})()} */}
 							    <li><a href="javascript:void(0)" onClick={() => this.setState({subcatactiveCollapse: !this.state.subcatactiveCollapse})}>Sub Categories <i className="fa fa-chevron-down"></i></a>
             <div id='categories' style={{ display: this.state.activeCollapse ==='categories' && this.state.subcatactiveCollapse===true  ? 'block' : 'none'  }}>
               <ul>
+			  {(() => {
+				  if(this.state.listSubCategoryData && typeof this.state.listSubCategoryData !=="undefined" & this.state.listSubCategoryData.length > 0){
+
 			  {this.state.listSubCategoryData && typeof this.state.listSubCategoryData !=="undefined" & this.state.listSubCategoryData.length > 0 && this.state.listSubCategoryData.map((itemTaskList,m) => (
 							  <li>
 								  
@@ -571,6 +582,17 @@ console.log("list cat")
 							
 							  </li>
 							   ))}
+							}else{
+								return(
+									<li>
+										No category selected
+									</li>
+									)
+								
+
+							}
+						})()}
+							   
 				  </ul>
 				  </div>
 				  </li>
@@ -585,6 +607,9 @@ console.log("list cat")
 					  <li><a href="javascript:void(0)" onClick={() => this.handleExpandCollaps("brands")}>ALL BRANDS <i className="fa fa-chevron-down"></i></a>
             <div id='brands' style={{ display: this.state.activeCollapse ==='brands' ? 'block' : 'none'  }}>
               <ul>
+			  {(() => {
+				  if(this.state.listBrandData && typeof this.state.listBrandData !=="undefined" & this.state.listBrandData.length > 0){
+
 			  {this.state.listBrandData && typeof this.state.listBrandData !=="undefined" & this.state.listBrandData.length > 0 && this.state.listBrandData.map((itemTaskList,m) => (
 			  
 			  <li>
@@ -601,6 +626,14 @@ onChange = {this.onChangeBrand}
 		
 		  </li>
 		   ))}
+		}else{
+			return(
+			<li>
+				No category selected
+			</li>
+			)
+		}
+	})()}
 						  </ul>
               </div>
 					  </li>
@@ -608,6 +641,9 @@ onChange = {this.onChangeBrand}
 					  <li><a href="javascript:void(0)" onClick={() => this.handleExpandCollaps("models")}>ALL MODELS <i className="fa fa-chevron-down"></i></a>
             <div id='models' style={{ display: this.state.activeCollapse ==='models' ? 'block' : 'none'  }}>
 						  <ul>
+						  {(() => {
+				  if(this.state.listSubCategoryData && typeof this.state.listSubCategoryData !=="undefined" & this.state.listSubCategoryData.length > 0){
+
 						  {this.state.listModelData && typeof this.state.listModelData !=="undefined" & this.state.listModelData.length > 0 && this.state.listModelData.map((itemTaskList,m) => (
 							   <li>
 								  
@@ -627,6 +663,14 @@ onChange = {this.onChangeBrand}
 							//   <li><a href="#">Software</a></li>
 							//   <li><a href="#">Internet</a></li>
 							  ))}
+							}else{
+								return(
+								<li>
+									No Brand selected
+								</li>
+								)
+							}
+						})()}
 						  </ul>
               </div>
 					  </li>	
@@ -677,6 +721,9 @@ onChange = {this.onChangeBrand}
 					  <li><a href="javascript:void(0)" onClick={() => this.handleExpandCollaps("city")}>city <i className="fa fa-chevron-down"></i></a>
             <div id='city' style={{ display: this.state.activeCollapse ==='city' ? 'block' : 'none'  }}>
 						  <ul>
+						  {(() => {
+				  if(this.state.listcityData && typeof this.state.listcityData !=="undefined" & this.state.listcityData.length > 0){
+
 						  {this.state.listcityData && typeof this.state.listcityData !=="undefined" & this.state.listcityData.length > 0 && this.state.listcityData.map((itemTaskList,m) => (
 							   <li>
 								  
@@ -692,6 +739,15 @@ onChange = {this.onChangeBrand}
 						 
 						   </li>
 						  ))}
+				  }
+						  else{
+							return(
+							<li>
+								No Country selected
+							</li>
+							)
+						}
+					})()}
 						  </ul>
               </div>
 					  </li>		  

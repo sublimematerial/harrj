@@ -151,15 +151,7 @@ class Home extends Component {
 	componentDidMount() {
 		// this.setState({ loading: true });
     console.log("app mounted");
-    // fetch(
-    //   "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=8ee8c21b20d24b37856fc3ab1e22a1e5"
-    // )
-    //   .then(data => data.json())
-    //   .then(data =>
-    //     this.setState({ data: data.articles, loading: false }, () =>
-    //       console.log(data.articles)
-    //     )
-    //   );
+    
 		this.ListCategoryFun();
 		this.ListLiveAuctionFun()
 		this.ListNormalAuctionFun();
@@ -226,8 +218,19 @@ class Home extends Component {
 
 	}
 	togglePopup() {
+		var lang
+		lang = localStorage.getItem("userId");
+		console.log("value of lang is")
+		console.log(lang)
+		if(lang!=null){
+			let path = `/web/createads`; 
+			//history.push(path);
+			this.props.history.push(path);
+		}else{
+			$('#popuplogin').modal('show');
+		}
 	
-		$('#createad').modal('show');
+		
 	  }
 	showMore= () => {
 		this.state.normalToShow === 4 ? (
@@ -259,18 +262,7 @@ class Home extends Component {
 
 	render() {
 
-		// var bannersettings = {
-		// 	dots: false,
-		// 	arrows: true,
-		// 	swipeToSlide: true,
-		// 	infinite: true,
-		// 	speed: 500,
-		// 	centerMode: true,
-		// 	slidesToShow: 1,
-		// 	slidesToScroll: 1,
-		// 	autoplay: true,
-		// 	variableWidth: false
-		//   };
+
 
 		var campsettings = {
 			infinite: true,
@@ -666,9 +658,9 @@ class Home extends Component {
 		
 			{this.state.listLiveAuctionData && typeof this.state.listLiveAuctionData !== "undefined" & this.state.listLiveAuctionData.length > 0 && this.state.listLiveAuctionData.slice(0,this.state.itemsToShow).map((itemLiveAuctionList, l) => (
 			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-			
+			{/* <NavLink to={"/web/product/info/" + itemLiveAuctionList.product_id} class="card-img-top d-block overflow-hidden" ><img class="card-img-top"  src={itemLiveAuctionList.product_img} alt="..." /></NavLink> */}
 				<div class="live-bid-content">
-					<a href="#">
+					<a href={"/web/product/info/" + itemLiveAuctionList.product_id}>
 						<img  src={itemLiveAuctionList.product_img}/>
 					</a>
 					<div class="live">
@@ -725,7 +717,7 @@ class Home extends Component {
 			{this.state.listNormalAuctionData && typeof this.state.listNormalAuctionData !== "undefined" & this.state.listNormalAuctionData.length > 0 && this.state.listNormalAuctionData.slice(0,this.state.normalToShow).map((itemNormalAuctionList, l) => (
 			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
 				<div class="live-bid-content">
-					<a href="#">
+					<a href={"/web/product/info/" + itemNormalAuctionList.product_id}>
 						<img src={itemNormalAuctionList.product_img}/>
 					</a>
 					<div class="live">

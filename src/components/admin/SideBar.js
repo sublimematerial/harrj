@@ -118,8 +118,10 @@ class SideBar extends Component {
                  <li> 
                   <NavLink to={"/admin/user/list"}><i class="fa fa-ticket" aria-hidden="true"></i> <span>Bidder List</span></NavLink>
                 </li>
-
-
+                <li> 
+                  <NavLink to={"/admin/year"}><i class="fa fa-ticket" aria-hidden="true"></i> <span>Year</span></NavLink>
+                </li>
+                
               </ul>
               
             </div>

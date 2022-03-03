@@ -398,7 +398,7 @@ ListLiveAuctionFilter=(data)=>{
       {this.state.listLiveAuctionData && typeof this.state.listLiveAuctionData !=="undefined" & this.state.listLiveAuctionData.length > 0 && this.state.listLiveAuctionData.map((itemLiveAuctionList,l) => (
 			<div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 				<div className="live-bid-content bid-new">
-					<a href="#">
+					<a href={"/web/product/info/" + itemLiveAuctionList.product_id}>
 						<img className="card-img-top" src={itemLiveAuctionList.product_img}/>
 					</a>
 					<div className="live">

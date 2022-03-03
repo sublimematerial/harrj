@@ -27,7 +27,8 @@ import Rectangle from './../../assets/website/img/livebid/Rectangle-294.svg';
 import user_icon from './../../assets/website/img/livebid/user_icon.svg';
 
 
-import { AdminLogin,register } from "./../../actions/auth";
+
+import {UserLogin,register} from "./../../actions/website/Home"
 import {toast} from 'react-toastify';
 class Header extends Component {
 
@@ -69,6 +70,7 @@ class Header extends Component {
     console.log(e.target.value)
     this.setState({
       email_id: e.target.value,
+      mobile_no:e.target.value,
     });
   }
 
@@ -112,7 +114,7 @@ console.log("submit btuon")
     const { dispatch, history } = this.props;
 
     if (this.checkBtn.context._errors.length === 0) {
-      dispatch(AdminLogin(this.state.email_id, this.state.password))
+      dispatch(UserLogin(this.state.email_id, this.state.mobile_no, this.state.password))
         .then((response) => {
          
           if(response.success || response.success ==="true" || response.success ===true){
@@ -122,12 +124,15 @@ console.log("submit btuon")
             });
             $('#popuplogin').modal('hide')
         }else{
+
           toast.error(response.message, {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeonClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
+          $('#popuplogin').modal('hide')
         }
         })
         .catch(() => {
          
           toast.error("something went wrong..!!", {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
+          $('#popuplogin').modal('hide')
         });
     } else {
       
@@ -160,17 +165,19 @@ console.log("submit btuon")
          
           if(response.success || response.success ==="true" || response.success ===true){
             toast.success('successful..!', {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
-            this.setState({
-              showPopup: true
-            });
-            $('#popuplogin').modal('hide')
+            // this.setState({
+            //   showPopup: true
+            // });
+            $('#popupregister').modal('hide')
         }else{
           toast.error(response.message, {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeonClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
+          $('#popupregister').modal('hide')
         }
         })
         .catch(() => {
          
           toast.error("something went wrong..!!", {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
+          $('#popupregister').modal('hide')
         });
     } else {
       
@@ -185,6 +192,7 @@ console.log("submit btuon")
 
   showRegister=(e) =>{
     $('#popupregister').modal('show')
+    $('#popuplogin').modal('hide')
   }
 showLogin =(e) =>{
   // localStorage.removeItem("userId")
@@ -241,7 +249,7 @@ showLogout=(e) =>{
                      <>
 									 <div className="signup-btn">
 										<a href="javascript:void(0)" onClick={this.showLogin	} >E-SERVICES LOGIN</a>
-										<a href="javascript:void(0)" onClick={this.showRegister	} >SIGN UP</a> 
+										{/* <a href="javascript:void(0)" onClick={this.showRegister	} >SIGN UP</a>  */}
 									</div> 
                   </>
                     ):(
@@ -285,14 +293,14 @@ showLogout=(e) =>{
 
       <Form onSubmit={this.handleLoginSubmit} >
                       <div className="form-group">
-                        <label>Email</label>
-                        <input className="form-control" type="email" onChange={this.onChangeEmailID}/>
+                        <label>Email/Mobile</label>
+                        <input className="form-control" type="text" onChange={this.onChangeEmailID}/>
                       </div>
 
-                      <div className="form-group">
+                      {/* <div className="form-group">
                         <label>Mobile</label>
-                        <input className="form-control" type="number" onChange={this.onChangeMobile} />
-                      </div>
+                        <input className="form-control" type="text" onChange={this.onChangeMobile} />
+                      </div> */}
                       <div className="form-group">
                         <div className="row">
                           <div className="col">
@@ -310,6 +318,9 @@ showLogout=(e) =>{
                         <button className="btn btn-primary account-btn" type="submit">Login</button>
                        {/* <NavLink to={"/admin/dashboard"} className="btn btn-primary account-btn" type="submit">Login</NavLink>*/}
                       </div>
+                      <div id="create-account-wrap">
+    <p>Not a member? <a href="javascript:void(0)" onClick={this.showRegister	}>Create Account</a></p><p>
+  </p></div>
                       <div className="account-footer">
                         <p><a href="register.html">Forgot password?</a></p>
                       </div>

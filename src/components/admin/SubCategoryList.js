@@ -12,26 +12,28 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import $ from 'jquery';
-import jQuery from 'jquery';
-import Popper from 'popper.js';
 
-import DataTable from 'datatables.net';
 
 import './../../assets/css/bootstrap.min.css'
 import "./../../assets/css/font-awesome.min.css";
 import "./../../assets/css/style.css"
 import "./../../assets/css/custom.css"
 //import "./../../App.css";
-
+import Checkbox from '@material-ui/core/Checkbox';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import { CategoryList } from "./../../actions/adminCategory";
 import { SubCategoryAdd, SubCategoryList, SubCategoryInfo, SubCategoryUpdate, SubCategoryDelete } from "./../../actions/adminSubcategory";
 
 import Header from './Header';
 import SideBar from './SideBar';
-import Footer from './Footer';
+
 
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 
 toast.configure();
 
@@ -56,20 +58,25 @@ class Dashboard extends Component {
     this.onChangeEditCategory = this.onChangeEditCategory.bind(this);
     this.onChangeEditSubCategory = this.onChangeEditSubCategory.bind(this);
     this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
-
+    this.handleAddSubCategory=this.handleAddSubCategory.bind(this);
     this.state = {
         listCategoryData: [],
         listSubCategoryData: [],
         delete_id:0,
         category_id:0,
+
         sub_category_name:'',
         sub_category_img:'',
 
         sub_category_id:0,
+        edit_selected:false,
         edit_category_id:0,
         edit_sub_category_name:'',
         edit_sub_category_img:'',
         edit_sub_category_view_img:'',
+        selected:false,
+        addSubCatList : [],
+        noofrows:0
 
     };
 
@@ -87,6 +94,8 @@ class Dashboard extends Component {
               ]
           } );
       } );*/
+
+     
     this.ListCategoryFun();
     this.ListSubCategoryFun();
   }
@@ -102,6 +111,13 @@ class Dashboard extends Component {
     });
   }
 
+  handleAddSubCategory=()=>{
+    // var array = this.state.addProductList;
+    // array.push({ tmidx: array.length + 1 });
+    var cnt=this.state.noofrows;
+    cnt=cnt+1
+    this.setState({ noofrows: cnt });
+  }
   ListCategoryFun=()=>{
 
     const { dispatch, history } = this.props;
@@ -178,7 +194,15 @@ class Dashboard extends Component {
       sub_category_img: e.target.files,
     });
   }
-
+  Yearchecked = event => {
+	  
+    this.setState({selected: event.target.id})
+  }
+  EditYearchecked = event => {
+	  
+    this.setState({selected: event.target.id})
+  }
+	
   handleSubmit=(e)=>{
     e.preventDefault();
 
@@ -295,6 +319,7 @@ class Dashboard extends Component {
   render() {
 
     const { isLoggedIn, message } = this.props;
+    var tmidx=0
 
     return (
     <React.Fragment>
@@ -397,12 +422,57 @@ class Dashboard extends Component {
                           </div>
                         </div>
                          <div class="row">
-                          <div class="col-sm-12">
+                          <div class="col-sm-6">
                             <div className="form-group">
                                 <label>Sub Category Image:</label>
                                <input type="file" className="form-control" id="sub_category_img" name="sub_category_img" onChange={this.onChangeSubCategoryImg} required />
                             </div>
                           </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <div className="form-group">
+                                <label>Need Year?:</label>
+                               {/* <input type="file" className="form-control" id="sub_category_img" name="sub_category_img" onChange={this.onChangeSubCategoryImg} required /> */}
+                               </div>
+                               <div class="col-sm-6">
+                               <Checkbox
+							 
+              icon={icon}
+              checkedIcon={checkedIcon}
+              style={{ marginRight: 8 }}
+			  selectedId={this.state.selected}
+              
+			  onChange = {this.Yearchecked}
+            />
+                            </div>
+                          </div>
+                          {/* <div class="col-sm-3">
+                              {(() => {
+                               if(tmidx===0) {
+                               return(
+                                <div className="form-group">
+                                  <a class="text-success font-18" title="Add">
+                                    <i class="fa fa-plus"  ></i>
+                                  </a>
+                                </div>
+                               )
+                               }else{
+                               return(
+                                <div className="form-group">
+                                  <a class="text-danger font-18" title="Remove">
+                                    <i class="fa fa-trash-o"  ></i>
+                                  </a>
+                                </div>
+                               )
+                               }
+                               })()}
+                            </div> */}
+                             <div className="form-group">
+                                  <a class="text-success font-18" title="Add">
+                                    <i class="fa fa-plus" onClick={this.handleAddSubCategory} ></i>
+                                  </a>
+                                </div>
                         </div>
                         <div className="m-t-20 text-center">
                             <button className="btn btn-primary btn-lg" type="submit">Submit</button>
@@ -460,6 +530,25 @@ class Dashboard extends Component {
                             <div className="form-group">
                                 <label>Category Image:</label>
                                <input type="file" className="form-control" id="edit_sub_category_img" name="edit_sub_category_img" onChange={this.onChangeEditSubCategoryImg}  />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <div className="form-group">
+                                <label>Need Year?:</label>
+                               {/* <input type="file" className="form-control" id="sub_category_img" name="sub_category_img" onChange={this.onChangeSubCategoryImg} required /> */}
+                               </div>
+                               <div class="col-sm-6">
+                               <Checkbox
+							 
+              icon={icon}
+              checkedIcon={checkedIcon}
+              style={{ marginRight: 8 }}
+			  selectedId={this.state.edit_selected}
+              
+			  onChange = {this.EditYearchecked}
+            />
                             </div>
                           </div>
                         </div>

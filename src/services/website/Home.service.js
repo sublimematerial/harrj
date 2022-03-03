@@ -5,6 +5,50 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 class HomeService {
 
+
+  UserLogin(email_id, mobile_no,password) {
+
+    const insertData = new FormData();
+    insertData.set('user_id', email_id);
+    // insertData.set('mobile_no', mobile_no);
+    insertData.set('password', password);
+//loginadmin
+    return axios
+    //  .post(API_URL + "login", insertData )
+    .post(API_URL + "login", insertData )
+      .then((response) => {
+        console.log("loging resp")
+        console.log(response)
+        if (response.data.token && typeof response.data.token !=="undefined" && response.data.token!=="") {
+
+          console.log("auth token")
+          console.log(JSON.stringify(response.data))
+      
+          localStorage.setItem("userId", JSON.stringify(response.data));
+        }else{
+          localStorage.removeItem("user");
+        }  
+        return response.data;
+      });
+
+
+   
+  }
+  register(name,mobile_no,email_id,password) {
+    const insertData = new FormData();
+    insertData.set('name', name);
+    insertData.set('email_id', email_id);
+    insertData.set('mobile_no', mobile_no);
+    insertData.set('role', "customer");
+    insertData.set('password', password);
+
+    
+    return axios
+      .post(API_URL + "register", insertData)
+      .then((response) => {
+        return response.data;
+      });
+  }
   BannerList() {
     return axios
       .get(API_URL + "admin/banner/list")
