@@ -23,7 +23,7 @@ import "./../../assets/css/style.css"
 import "./../../assets/css/custom.css"
 //import "./../../App.css";
 
-import { CategoryAdd, CategoryList, CategoryInfo, CategoryUpdate, CategoryDelete } from "./../../actions/adminCategory";
+import { YearAdd, YearList, YearInfo, YearUpdate, YearDelete } from "./../../actions/adminYear";
 
 import Header from './Header';
 import SideBar from './SideBar';
@@ -48,7 +48,7 @@ class Year extends Component {
     this.onChangeYear = this.onChangeYear.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.InfoCategoryFun = this.InfoCategoryFun.bind(this);
+    this.InfoyearFun = this.InfoyearFun.bind(this);
 
     this.onChangeEditName = this.onChangeEditName.bind(this);
     this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
@@ -97,7 +97,7 @@ class Year extends Component {
   ListYearFun=()=>{
 
     const { dispatch, history } = this.props;
-    dispatch(CategoryList())
+    dispatch(YearList())
       .then((response) => {
         this.setState({
             listYearData: response.data
@@ -120,7 +120,7 @@ class Year extends Component {
 
   handleDelete =()=>{
     const { dispatch, history } = this.props;
-    dispatch(CategoryDelete(this.state.delete_id))
+    dispatch(YearDelete(this.state.delete_id))
       .then((response) => {
         if(response.success || response.success ==="true" || response.success ===true){
             toast.success(response.message, {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeonClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
@@ -156,7 +156,7 @@ class Year extends Component {
     const { dispatch, history } = this.props;
 
     if (this.checkBtn.context._errors.length === 0) {
-      dispatch(CategoryAdd(this.state.year))
+      dispatch(YearAdd(this.state.year))
         .then((response) => {
             if(response.success || response.success ==="true" || response.success ===true){
               toast.success(response.message, {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeonClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
@@ -182,15 +182,15 @@ class Year extends Component {
     }
   }
 
-  InfoCategoryFun=(category_id)=>{
+  InfoyearFun=(year_id)=>{
 
     const { dispatch, history } = this.props;
-    dispatch(CategoryInfo(category_id))
+    dispatch(YearInfo(year_id))
       .then((response) => {
         if(response.data && typeof response.data !=="undefined" && response.data.length>0){
             this.setState({
-              category_id: category_id,
-              edit_year: response.data[0].yeary,
+              year_id: response.data[0].year_id,
+              edit_year: response.data[0].year,
              
 
             });
@@ -220,7 +220,7 @@ class Year extends Component {
     const { dispatch, history } = this.props;
 
     if (this.checkUpdateBtn.context._errors.length === 0) {
-      dispatch(CategoryUpdate(this.state.year_id, this.state.edit_year))
+      dispatch(YearUpdate(this.state.year_id, this.state.edit_year))
         .then((response) => {
             if(response.success || response.success ==="true" || response.success ===true){
               toast.success(response.message, {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeonClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
@@ -292,11 +292,19 @@ class Year extends Component {
                         </thead>
                         <tbody>
 
-                          {this.state.listYearData && typeof this.state.listYearData !=="undefined" & this.state.listYearData.length > 0 && this.state.listYearData.map((itemCategoryList,l) => (
+                          {this.state.listYearData && typeof this.state.listYearData !=="undefined" & this.state.listYearData.length > 0 && this.state.listYearData.map((itemYearList,l) => (
                             <tr>
                               <td>{l+1}</td>
-                              <td>{itemCategoryList.year}</td>
-                              
+                              <td>{itemYearList.year}</td>
+                              <td className="text-right">
+                                <div className="dropdown dropdown-action">
+                                  <a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                                  <div className="dropdown-menu dropdown-menu-right">
+                                    <a className="dropdown-item" onClick={() => this.InfoyearFun(itemYearList.year_id)}><i className="fa fa-pencil m-r-5"></i> Edit</a>
+                                    <a className="dropdown-item" onClick={() => this.handleDeleteConfirm(itemYearList.year_id)}><i className="fa fa-trash-o m-r-5"></i> Delete</a>
+                                  </div>
+                                </div>
+                              </td>
                             </tr>
                           ))}
 

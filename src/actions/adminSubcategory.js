@@ -6,8 +6,8 @@ import {
 
 import adminSubCategoryService from "../services/adminSubcategory.service";
 
-export const SubCategoryAdd = (category_id, sub_category_name,sub_category_img) => (dispatch) => {
-  return adminSubCategoryService.SubCategoryAdd(category_id, sub_category_name,sub_category_img).then(
+export const SubCategoryAdd = (category_id, sub_category_name,sub_category_img,year) => (dispatch) => {
+  return adminSubCategoryService.SubCategoryAdd(category_id, sub_category_name,sub_category_img,year).then(
     (response) => {
       dispatch({
         type: DATA_SUCCESS,

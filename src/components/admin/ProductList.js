@@ -626,7 +626,6 @@ console.log(response.data)
               edit_country_id:response.data[0].country_id,
               edit_city_id:response.data[0].city_id,
               edit_model_id:response.data[0].model_id,
-              edit_sub_category_id:response.data[0].sub_category_id,
               edit_start_date_time:response.data[0].start_date_time,
               edit_end_date_time:response.data[0].end_date_time,
               edit_start_time:response.data[0].auction_type==="online"?response.data[0].start_time:"00:00",
@@ -1284,10 +1283,10 @@ console.log(this.state.edit_end_date_time)
                           <div class="col-sm-3">
                             <div className="form-group">
                               <label>Sub Category:</label>
-                              <select className="form-control" placeholder="Category" id="category_id" name="edit_category_id" value={this.state.edit_category_id} onChange={this.onChangeEditSubCategory} required >
+                              <select className="form-control" placeholder="Category" id="edit_category_id" name="edit_category_id" value={this.state.edit_category_id} onChange={this.onChangeEditSubCategory} required >
                                   <option value="">Select Sub Category</option>
                                   {this.state.listSubCategoryData && typeof this.state.listSubCategoryData !=="undefined" & this.state.listSubCategoryData.length > 0 && this.state.listSubCategoryData.map((itemTaskList,m) => (
-                                    <option value={itemTaskList.category_id}>{itemTaskList.category_name}</option>
+                                    <option value={itemTaskList.sub_category_id}>{itemTaskList.sub_category_name}</option>
                                   ))}
                               </select>
                             </div>

@@ -54,7 +54,7 @@ class Dashboard extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.InfoSubCategoryFun = this.InfoSubCategoryFun.bind(this);
-
+    this.onChangeMulSubCategory=this.onChangeMulSubCategory.bind(this);
     this.onChangeEditCategory = this.onChangeEditCategory.bind(this);
     this.onChangeEditSubCategory = this.onChangeEditSubCategory.bind(this);
     this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
@@ -95,6 +95,7 @@ class Dashboard extends Component {
           } );
       } );*/
 
+      
      
     this.ListCategoryFun();
     this.ListSubCategoryFun();
@@ -112,11 +113,21 @@ class Dashboard extends Component {
   }
 
   handleAddSubCategory=()=>{
-    // var array = this.state.addProductList;
-    // array.push({ tmidx: array.length + 1 });
-    var cnt=this.state.noofrows;
-    cnt=cnt+1
-    this.setState({ noofrows: cnt });
+    var array = this.state.addSubCatList;
+    if(array==0){
+      var temp_arry = [];
+    
+    var temp_obj = {'tmidx':0, 'sub_cat':'','subcat_img':'','needchec':''}
+
+    temp_arry.push(temp_obj);
+
+    this.setState({
+      addSubCatList: temp_arry
+    });
+    }else{
+    array.push({ tmidx: array.length + 1 });
+    this.setState({ addSubCatList: array });
+    }
   }
   ListCategoryFun=()=>{
 
@@ -189,18 +200,24 @@ class Dashboard extends Component {
     });
   }
 
+  onChangeMulSubCategory=(e)=>{
+    this.setState({
+      sub_category_name: e.target.value,
+    });
+  }
   onChangeSubCategoryImg=(e)=>{
     this.setState({
       sub_category_img: e.target.files,
     });
   }
   Yearchecked = event => {
-	  
-    this.setState({selected: event.target.id})
+	  console.log("now selected")
+    console.log(event.target.checked)
+    this.setState({selected: event.target.checked?1:0})
   }
   EditYearchecked = event => {
 	  
-    this.setState({selected: event.target.id})
+    this.setState({edit_selected: event.target.id})
   }
 	
   handleSubmit=(e)=>{
@@ -209,13 +226,14 @@ class Dashboard extends Component {
     this.setState({
       loading: true,
     });
-
+console.log("the selected check box")
+console.log(this.state.selected)
     this.Addform.validateAll();
 
     const { dispatch, history } = this.props;
 
     if (this.checkBtn.context._errors.length === 0) {
-      dispatch(SubCategoryAdd(this.state.category_id, this.state.sub_category_name,this.state.sub_category_img))
+      dispatch(SubCategoryAdd(this.state.category_id, this.state.sub_category_name,this.state.sub_category_img,this.state.selected))
         .then((response) => {
             if(response.success || response.success ==="true" || response.success ===true){
               toast.success(response.message, {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeonClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
@@ -430,12 +448,13 @@ class Dashboard extends Component {
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-sm-6">
+                          <div class="col-sm-4">
                             <div className="form-group">
                                 <label>Need Year?:</label>
                                {/* <input type="file" className="form-control" id="sub_category_img" name="sub_category_img" onChange={this.onChangeSubCategoryImg} required /> */}
                                </div>
-                               <div class="col-sm-6">
+                               </div>
+                               <div class="col-sm-4">
                                <Checkbox
 							 
               icon={icon}
@@ -446,7 +465,79 @@ class Dashboard extends Component {
 			  onChange = {this.Yearchecked}
             />
                             </div>
+                            
+                         <div class="col-sm-4">
+                          <div className="form-group">
+                                  <a class="text-success font-18" title="Add">
+                                    <i class="fa fa-plus" onClick={this.handleAddSubCategory} ></i>
+                                  </a>
+                                </div>
+                                </div>
                           </div>
+                          {this.state.addSubCatList.map((itemaddProductList, tmidx) => (
+                         <div>
+                         <div class="row">
+                            <div class="col-sm-12">
+                            <div className="form-group">
+                                <label>Sub Category:</label>
+                                <input type="text" className="form-control" placeholder="Sub Category" id={tmidx} name="sub_category_name" value={this.state.sub_category_name} onChange={this.onChangeMulSubCategory} required />
+                            </div>
+                          </div>
+                           
+                         </div>
+                         <div class="row">
+                         <div class="col-sm-6">
+                           <div className="form-group">
+                               <label>Sub Category Image:</label>
+                              <input type="file" className="form-control" id="sub_category_img" name="sub_category_img" onChange={this.onChangeSubCategoryImg} required />
+                           </div>
+                         </div>
+                       </div>
+                       <div class="row">
+                          <div class="col-sm-4">
+                            <div className="form-group">
+                                <label>Need Year?:</label>
+                               {/* <input type="file" className="form-control" id="sub_category_img" name="sub_category_img" onChange={this.onChangeSubCategoryImg} required /> */}
+                               </div>
+                               </div>
+                               <div class="col-sm-4">
+                               <Checkbox
+							 
+              icon={icon}
+              checkedIcon={checkedIcon}
+              style={{ marginRight: 8 }}
+			  selectedId={this.state.selected}
+              
+			  onChange = {this.Yearchecked}
+            />
+                            </div>
+                            
+                         <div class="col-sm-4">
+                          <div className="form-group">
+                                  <a class="text-success font-18" title="Add">
+                                    <i class="fa fa-plus" onClick={this.handleAddSubCategory} ></i>
+                                  </a>
+                                </div>
+                                </div>
+                          </div>
+                       </div>
+                         // <div class="row" id={"add_pro_div_"+tmidx}>
+                          //     <div class="col-sm-3">
+                          //     <div className="form-group">
+                          //         <label>Sub Category:</label>
+                          //         <input type="file" className="form-control add_product_img" id={"product_img_add_"+tmidx} name="product_img"  required />
+                          //     </div>
+                          //   </div>
+                          //   <div class="col-sm-3">
+                          //     <div className="form-group">
+                          //         <label>Subcategory Images:</label>
+                          //         <input type="file" className="form-control add_product_img" id={"product_img_add_"+tmidx} name="product_img"  required />
+                          //     </div>
+                          //   </div>
+                      
+                          // </div>
+                        ))}
+                          
                           {/* <div class="col-sm-3">
                               {(() => {
                                if(tmidx===0) {
@@ -468,12 +559,8 @@ class Dashboard extends Component {
                                }
                                })()}
                             </div> */}
-                             <div className="form-group">
-                                  <a class="text-success font-18" title="Add">
-                                    <i class="fa fa-plus" onClick={this.handleAddSubCategory} ></i>
-                                  </a>
-                                </div>
-                        </div>
+                            
+                        
                         <div className="m-t-20 text-center">
                             <button className="btn btn-primary btn-lg" type="submit">Submit</button>
                         </div>

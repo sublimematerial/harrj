@@ -10,7 +10,7 @@ class yearService {
    
 
     return axios
-      .post(API_URL + "admin/category/add", insertData )
+      .post(API_URL + "admin/year/add", insertData )
       .then((response) => {
         return response.data;
       });
@@ -18,7 +18,7 @@ class yearService {
 
   yearList() {
     return axios
-      .get(API_URL + "admin/category/list")
+      .get(API_URL + "admin/year/list")
       .then((response) => {
         return response.data;
       });
@@ -26,7 +26,7 @@ class yearService {
 
   YearInfo(year_id) {
     return axios
-      .post(API_URL + "admin/category/getinfo", { year_id })
+      .post(API_URL + "admin/year/getinfo", { year_id })
       .then((response) => {
         return response.data;
       });
@@ -39,7 +39,7 @@ class yearService {
    
 
     return axios
-      .post(API_URL + "admin/category/update", updateData )
+      .post(API_URL + "admin/year/update", updateData )
       .then((response) => {
         return response.data;
       });
@@ -47,7 +47,7 @@ class yearService {
   
   YearDelete(year_id) {
     return axios
-      .post(API_URL + "admin/category/delete", { year_id })
+      .post(API_URL + "admin/year/delete", { year_id })
       .then((response) => {
         return response.data;
       });

@@ -4,12 +4,12 @@ import authHeader from "./auth-header";
 const API_URL = process.env.REACT_APP_API_URL;
 
 class subcategoryService {
-  SubCategoryAdd(category_id, sub_category_name,sub_category_img) {
+  SubCategoryAdd(category_id, sub_category_name,sub_category_img,year) {
     const insertData = new FormData();
     insertData.set('category_id', category_id);
     insertData.set('sub_category_name', sub_category_name);
     insertData.set('sub_category_img', sub_category_img[0]);
-
+    insertData.set('sub_category_year_applies', year);
     return axios
       .post(API_URL + "admin/sub_category/add", insertData, { headers: authHeader() })
       .then((response) => {
