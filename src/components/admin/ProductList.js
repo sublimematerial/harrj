@@ -145,6 +145,7 @@ class Dashboard extends Component {
 
         other_show:false,
         other_edit_show:false,
+        sub_category_year_applies:0,
 
 
     };
@@ -408,8 +409,12 @@ var catid=e.target.value
   }
   onChangeSubCategory=(e)=>{
     var subcatid=e.target.value
+    console.log("key is")
+    var IsYear=parseInt(e.target[e.target.selectedIndex].getAttribute('data-year'))
+   
     this.setState({
       sub_category_id: e.target.value,
+      sub_category_year_applies:IsYear
     }, () => {
       this.ListBrandFun(subcatid);
   });
@@ -991,7 +996,7 @@ console.log(this.state.edit_end_date_time)
                               <select className="form-control" placeholder="Brand" id="brand_id" name="brand_id" value={this.state.sub_category_id} onChange={this.onChangeSubCategory} required >
                                   <option value="">Select Sub Category</option>
                                   {this.state.listSubCategoryData && typeof this.state.listSubCategoryData !=="undefined" & this.state.listSubCategoryData.length > 0 && this.state.listSubCategoryData.map((itemTaskList,m) => (
-                                    <option value={itemTaskList.sub_category_id}>{itemTaskList.sub_category_name}</option>
+                                    <option data-year={itemTaskList.sub_category_year_applies} value={itemTaskList.sub_category_id}>{itemTaskList.sub_category_name}</option>
                                   ))}
                               </select>
                             </div>
@@ -1073,12 +1078,12 @@ console.log(this.state.edit_end_date_time)
                             </div>
                          */}
                         
-                            {1===1? (
+                            {this.state.sub_category_year_applies===1? (
                             <div class="col-sm-3">
                             <div className="form-group">
                                 <label>Year:</label>
                                 {/* <input type="file" className="form-control add_video" id="video" name="video" onChange={this.onChangeVideo} required /> */}
-                                <select className="form-control" placeholder="Model" id="model_id" name="model_id" value={this.state.model_id} onChange={this.onChangeModel} required >
+                                <select className="form-control" placeholder="Model" id="model_id" name="model_id"  onChange={this.onChangeModel} required >
                                   <option value="">Select year</option>
                                   {this.state.listModelData && typeof this.state.listModelData !=="undefined" & this.state.listModelData.length > 0 && this.state.listModelData.map((itemTaskList,m) => (
                                     <option value={itemTaskList.model_id}>{itemTaskList.model_name}</option>

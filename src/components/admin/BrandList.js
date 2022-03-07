@@ -75,7 +75,8 @@ class Brand extends Component {
         brand_id:0,
         edit_brand_name:'',
         edit_brand_img:'',
-        edit_brand_img_view:''
+        edit_brand_img_view:'',
+        addBrandList : [],
 
 
     };
@@ -94,10 +95,51 @@ class Brand extends Component {
               ]
           } );
     });*/
+    var temp_arry = [];
+    
+      var temp_obj = {'tmidx':0, 'brand_name':'','brand_img':''}
+  
+      temp_arry.push(temp_obj);
+  
+      this.setState({
+        addBrandList: temp_arry
+      });
     this.ListCategoryFun();
     this.ListBrandFun();
   }
+  handleAddBrand=()=>{
+    var array = this.state.addBrandList;
+    if(array==0){
+      var temp_arry = [];
+    
+    var temp_obj = {'tmidx':0, 'brand_name':'','brand_img':''}
 
+    temp_arry.push(temp_obj);
+
+    this.setState({
+      addSubCatList: temp_arry
+    });
+    }else{
+      var array = this.state.addBrandList;
+     
+      var temp_obj = {'tmidx':array.length, 'brand_name':'','brand_img':''}
+      array.push(temp_obj);
+
+      this.setState({
+        addBrandList: array
+      });
+    
+    }
+  }
+
+  handleRemoveBrand=(tmidx)=>{
+console.log("remove brand")
+console.log(this.state.addBrandList)
+    var id=parseInt(tmidx)
+    console.log(id)
+    let filteredArray = this.state.addBrandList.filter(item => item.tmidx !== id)
+    this.setState({addBrandList: filteredArray});
+  }
   TableDataUpdate=()=>{
 
     $('#example').DataTable( {
@@ -210,14 +252,55 @@ class Brand extends Component {
   }
 
   onChangeBrand=(e)=>{
-    this.setState({
-      brand_name: e.target.value,
-    });
+    // this.setState({
+    //   brand_name: e.target.value,
+    // });
+    var id=parseInt(e.target.id)
+    let updatedItemList = this.state.addBrandList.map((item) => {
+      
+      
+      if (item.tmidx === id) {
+        item={ ...item, brand_name: e.target.value };
+        // return { ...item, sub_cat: e.target.value };
+        console.log("item now ")
+        console.log(item)
+      }
+      return item;
+   });
+   console.log(updatedItemList)
+   this.setState({
+    addBrandList: updatedItemList,
+  }, () => {
+     
+    console.log("now subcategory array lis ist")
+    console.log(this.state.addSubCatList)
+});
   }
     onChangeBrandImg=(e)=>{
-    this.setState({
-      brand_img: e.target.files,
-    });
+    // this.setState({
+    //   brand_img: e.target.files,
+    // });
+
+    console.log("image event fired")
+var id=parseInt(e.target.id)
+    var id=parseInt(e.target.id)
+    console.log("id")
+console.log(id)
+console.log(e.target.files[0])
+    let updatedItemList = this.state.addBrandList.map((item) => {
+           
+      if (item.tmidx === id) {
+        item={ ...item, brand_img: e.target.files[0] };
+        // return { ...item, sub_cat: e.target.value };
+       console.log("now item")
+       console.log(item)
+      }
+      return item;
+   });
+  
+   this.setState({
+    addSubCatList: updatedItemList,
+  });
   }
 
   handleSubmit=(e)=>{
@@ -230,11 +313,20 @@ class Brand extends Component {
     this.Addform.validateAll();
 
     const { dispatch, history } = this.props;
-
+    let brandImgList = this.state.addSubCatList.map((item) => {
+           
+      
+      return item.brand_img;
+   });
+   let brandNameList = this.state.addSubCatList.map((item) => {
+           
+      
+    return item.brand_name;
+ });
     if (this.checkBtn.context._errors.length === 0) {
       console.log("now param")
       console.log(this.state.category_id)
-      dispatch(BrandAdd(this.state.brand_name,this.state.category_id,this.state.sub_category_id,this.state.brand_img))
+      dispatch(BrandAdd(this.state.category_id,this.state.sub_category_id,brandNameList,  brandImgList))
         .then((response) => {
             if(response.success || response.success ==="true" || response.success ===true){
               toast.success(response.message, {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeonClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
@@ -445,21 +537,53 @@ class Brand extends Component {
                               </select>
                             </div>
                           </div>
-                          <div class="col-sm-12">
+                          
+                          
+                        </div>
+                        {this.state.addBrandList.map((itemaddBrandList, tmidx) => (
+                          <div>
+                        <div class="row">
+                        <div class="col-sm-12">
                             <div className="form-group">
                                 <label>Brand Name:</label>
-                                <input type="text" className="form-control" placeholder="Brand Name" id="brand_name" name="brand_name" value={this.state.brand_name} onChange={this.onChangeBrand} required />
+                                <input type="text" className="form-control" placeholder="Brand Name" id={tmidx} name="brand_name" value={itemaddBrandList.brand_name} onChange={this.onChangeBrand} required />
                             </div>
                           </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-12">
+                          <div class="col-sm-4">
                             <div className="form-group">
                                 <label>Brand Image:</label>
-                               <input type="file" className="form-control" id="brand_img" name="brand_img" onChange={this.onChangeBrandImg} required />
+                               <input type="file" className="form-control" id={tmidx} name="brand_img" onChange={this.onChangeBrandImg} required />
                             </div>
                           </div>
+                          {(() => {
+                          if(tmidx===this.state.addBrandList.length-1){
+                                 return(
+                          <div class="col-sm-3">
+                          <div className="form-group">
+                                  <a class="text-success font-18" title="Add">
+                                    <i class="fa fa-plus" onClick={this.handleAddBrand} ></i>
+                                  </a>
+                                </div>
+                                </div>
+                                 )
+                                }
+                               })()}
+                                {(() => {
+				                       if(tmidx>0 &&tmidx===this.state.addBrandList.length-1){
+                                 return(
+                                <div class="col-sm-3">
+                                <div className="form-group">
+                                  <a class="text-danger font-18" title="Remove">
+                                    <i class="fa fa-trash-o" onClick={() => this.handleRemoveBrand(tmidx)} ></i>
+                                  </a>
+                                </div>
+                                </div>
+                                 )
+         }
+        })()}
                         </div>
+                        </div>
+                         ))}
                         <div className="m-t-20 text-center">
                             <button className="btn btn-primary btn-lg" type="submit">Submit</button>
                         </div>

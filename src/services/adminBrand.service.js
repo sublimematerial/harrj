@@ -4,13 +4,19 @@ import authHeader from "./auth-header";
 const API_URL = process.env.REACT_APP_API_URL;
 
 class brandService {
-  BrandAdd(brand_name,cat_id,sub_cat_id,brand_img) {
+  BrandAdd(cat_id,sub_cat_id,brand_name,brand_img) {
     const insertData = new FormData();
-    insertData.set('brand_name', brand_name);
+   // insertData.set('brand_name', brand_name);
     insertData.set('category_id', cat_id);
     insertData.set('sub_category_id', sub_cat_id);
-    insertData.set('brand_img', brand_img[0]);
+    //insertData.set('brand_img', brand_img[0]);
+    for(var i=0; i<brand_name.length; i++){
+      insertData.append('brand_name', brand_name[i]);
+    }
 
+    for(var j=0; j<brand_img.length; j++){
+      insertData.append('brand_img', brand_img[j]);
+    }
     return axios
       .post(API_URL + "admin/brand/add", insertData, { headers: authHeader() } )
       .then((response) => {

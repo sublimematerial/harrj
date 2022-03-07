@@ -4,12 +4,37 @@ import authHeader from "./auth-header";
 const API_URL = process.env.REACT_APP_API_URL;
 
 class subcategoryService {
-  SubCategoryAdd(category_id, sub_category_name,sub_category_img,year) {
+  SubCategoryAdd(category_id, subCategoryNameVar,subCategoryImgArry,subCategoryYearArry) {
+    
+    console.log("category_id: ");
+    console.log(category_id);
+
+    console.log("subCategoryNameVar: ");
+    console.log(subCategoryNameVar);
+
+    console.log("subCategoryImgArry: ");
+    console.log(subCategoryImgArry);
+
     const insertData = new FormData();
     insertData.set('category_id', category_id);
-    insertData.set('sub_category_name', sub_category_name);
-    insertData.set('sub_category_img', sub_category_img[0]);
-    insertData.set('sub_category_year_applies', year);
+    
+    for(var i=0; i<subCategoryNameVar.length; i++){
+      insertData.append('sub_category_name', subCategoryNameVar[i]);
+    }
+
+    for(var j=0; j<subCategoryImgArry.length; j++){
+      insertData.append('sub_category_img', subCategoryImgArry[j]);
+    }
+     for(var j=0; j<subCategoryYearArry.length; j++){
+       console.log("value ")
+       console.log(subCategoryYearArry[j])
+      insertData.append('sub_category_year_applies', subCategoryYearArry[j]);
+    }
+
+
+    console.log("insertData: ");
+    console.log(insertData);
+
     return axios
       .post(API_URL + "admin/sub_category/add", insertData, { headers: authHeader() })
       .then((response) => {

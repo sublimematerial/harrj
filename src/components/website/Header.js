@@ -30,6 +30,7 @@ import user_icon from './../../assets/website/img/livebid/user_icon.svg';
 
 import {UserLogin,register} from "./../../actions/website/Home"
 import {toast} from 'react-toastify';
+import GoogleLogin from 'react-google-login';
 class Header extends Component {
 
   constructor(props) {

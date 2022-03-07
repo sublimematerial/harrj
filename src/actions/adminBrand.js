@@ -6,8 +6,8 @@ import {
   
   import adminBrandService from "../services/adminBrand.service";
   
-  export const BrandAdd = (brand_name,cat_id,sub_cat_id,brand_img) => (dispatch) => {
-    return adminBrandService.BrandAdd(brand_name,cat_id,sub_cat_id,brand_img).then(
+  export const BrandAdd = (cat_id,sub_cat_id,brand_name,brand_img) => (dispatch) => {
+    return adminBrandService.BrandAdd(cat_id,sub_cat_id,brand_name,brand_img).then(
       (response) => {
         dispatch({
           type: DATA_SUCCESS,

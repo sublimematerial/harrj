@@ -54,7 +54,7 @@ class Dashboard extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.InfoSubCategoryFun = this.InfoSubCategoryFun.bind(this);
-    this.onChangeMulSubCategory=this.onChangeMulSubCategory.bind(this);
+    
     this.onChangeEditCategory = this.onChangeEditCategory.bind(this);
     this.onChangeEditSubCategory = this.onChangeEditSubCategory.bind(this);
     this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
@@ -76,7 +76,7 @@ class Dashboard extends Component {
         edit_sub_category_view_img:'',
         selected:false,
         addSubCatList : [],
-        noofrows:0
+        
 
     };
 
@@ -95,8 +95,15 @@ class Dashboard extends Component {
           } );
       } );*/
 
-      
-     
+      var temp_arry = [];
+    
+      var temp_obj = {'tmidx':0, 'sub_cat':'','subcat_img':'','needchec':''}
+  
+      temp_arry.push(temp_obj);
+  
+      this.setState({
+        addSubCatList: temp_arry
+      });
     this.ListCategoryFun();
     this.ListSubCategoryFun();
   }
@@ -125,10 +132,29 @@ class Dashboard extends Component {
       addSubCatList: temp_arry
     });
     }else{
-    array.push({ tmidx: array.length + 1 });
-    this.setState({ addSubCatList: array });
+      var array = this.state.addSubCatList;
+      console.log("array len")
+      console.log(array.length)
+      var temp_obj = {'tmidx':array.length, 'sub_cat':'','subcat_img':'','needchec':''}
+      array.push(temp_obj);
+
+      this.setState({
+        addSubCatList: array
+      });
+    // array.push({ tmidx: array.length + 1 });
+    // this.setState({ addSubCatList: array });
+    console.log("now ")
+    console.log(this.state.addSubCatList)
     }
   }
+  handleRemoveSubCat=(tmidx)=>{
+    var id=parseInt(tmidx)
+
+console.log(this.state.addSubCatList)
+  let filteredArray = this.state.addSubCatList.filter(item => item.tmidx !== id)
+    this.setState({addSubCatList: filteredArray});
+ 
+}
   ListCategoryFun=()=>{
 
     const { dispatch, history } = this.props;
@@ -195,25 +221,78 @@ class Dashboard extends Component {
   }
 
   onChangeSubCategory=(e)=>{
-    this.setState({
-      sub_category_name: e.target.value,
-    });
+    // this.setState({
+    //   sub_category_name: e.target.value,
+    // });
+var id=parseInt(e.target.id)
+    let updatedItemList = this.state.addSubCatList.map((item) => {
+      
+      
+      if (item.tmidx === id) {
+        item={ ...item, sub_cat: e.target.value };
+        // return { ...item, sub_cat: e.target.value };
+        console.log("item now ")
+        console.log(item)
+      }
+      return item;
+   });
+   console.log(updatedItemList)
+   this.setState({
+    addSubCatList: updatedItemList,
+  }, () => {
+     
+    console.log("now subcategory array lis ist")
+    console.log(this.state.addSubCatList)
+});
   }
 
-  onChangeMulSubCategory=(e)=>{
-    this.setState({
-      sub_category_name: e.target.value,
-    });
-  }
+  
   onChangeSubCategoryImg=(e)=>{
-    this.setState({
-      sub_category_img: e.target.files,
-    });
+    // this.setState({
+    //   sub_category_img: e.target.files,
+    // });
+console.log("image event fired")
+var id=parseInt(e.target.id)
+    var id=parseInt(e.target.id)
+    console.log("id")
+console.log(id)
+console.log(e.target.files[0])
+    let updatedItemList = this.state.addSubCatList.map((item) => {
+           
+      if (item.tmidx === id) {
+        item={ ...item, subcat_img: e.target.files[0] };
+        // return { ...item, sub_cat: e.target.value };
+       console.log("now item")
+       console.log(item)
+      }
+      return item;
+   });
+  
+   this.setState({
+    addSubCatList: updatedItemList,
+  }
+);
   }
   Yearchecked = event => {
 	  console.log("now selected")
     console.log(event.target.checked)
     this.setState({selected: event.target.checked?1:0})
+
+
+    var id=parseInt(event.target.id)
+    let updatedItemList = this.state.addSubCatList.map((item) => {
+           
+      if (item.tmidx === id) {
+        item={ ...item, needchec: event.target.checked?1:0 };
+      
+      }
+      return item;
+   });
+  
+   this.setState({
+    addSubCatList: updatedItemList,
+  }
+);
   }
   EditYearchecked = event => {
 	  
@@ -223,17 +302,22 @@ class Dashboard extends Component {
   handleSubmit=(e)=>{
     e.preventDefault();
 
-    this.setState({
-      loading: true,
+    var subCategoryNameVar = $(".add_subcat_name").map(function(){return $(this).val();}).get();
+    var subCategoryyearVar = $(".add_year").map(function(){return $(this).val();}).get();
+    var subCategoryImgArry = [];
+    $('.add_subcat_img').each(function(index, element){
+     console.log("element: ")
+     console.log(element.files[0])
+     subCategoryImgArry.push(element.files[0]);
     });
-console.log("the selected check box")
-console.log(this.state.selected)
+
+
     this.Addform.validateAll();
 
     const { dispatch, history } = this.props;
 
     if (this.checkBtn.context._errors.length === 0) {
-      dispatch(SubCategoryAdd(this.state.category_id, this.state.sub_category_name,this.state.sub_category_img,this.state.selected))
+      dispatch(SubCategoryAdd(this.state.category_id, subCategoryNameVar, subCategoryImgArry,subCategoryyearVar))
         .then((response) => {
             if(response.success || response.success ==="true" || response.success ===true){
               toast.success(response.message, {position: "bottom-right", autoClose: 5000, hideProgressBar: false, closeonClick: true, pauseOnHover: true, draggable: true, progress: undefined, });
@@ -432,26 +516,27 @@ console.log(this.state.selected)
                               </select>
                             </div>
                           </div>
-                          <div class="col-sm-12">
+                          </div>
+                         {/*  <div class="col-sm-12">
                             <div className="form-group">
                                 <label>Sub Category:</label>
                                 <input type="text" className="form-control" placeholder="Sub Category" id="sub_category_name" name="sub_category_name" value={this.state.sub_category_name} onChange={this.onChangeSubCategory} required />
                             </div>
                           </div>
-                        </div>
-                         <div class="row">
+                        </div> */}
+                         {/* <div class="row">
                           <div class="col-sm-6">
                             <div className="form-group">
                                 <label>Sub Category Image:</label>
                                <input type="file" className="form-control" id="sub_category_img" name="sub_category_img" onChange={this.onChangeSubCategoryImg} required />
                             </div>
                           </div>
-                        </div>
-                        <div class="row">
+                        </div> */}
+                        {/* <div class="row">
                           <div class="col-sm-4">
                             <div className="form-group">
                                 <label>Need Year?:</label>
-                               {/* <input type="file" className="form-control" id="sub_category_img" name="sub_category_img" onChange={this.onChangeSubCategoryImg} required /> */}
+                             
                                </div>
                                </div>
                                <div class="col-sm-4">
@@ -473,14 +558,14 @@ console.log(this.state.selected)
                                   </a>
                                 </div>
                                 </div>
-                          </div>
+                          </div> */}
                           {this.state.addSubCatList.map((itemaddProductList, tmidx) => (
                          <div>
                          <div class="row">
                             <div class="col-sm-12">
                             <div className="form-group">
                                 <label>Sub Category:</label>
-                                <input type="text" className="form-control" placeholder="Sub Category" id={tmidx} name="sub_category_name" value={this.state.sub_category_name} onChange={this.onChangeMulSubCategory} required />
+                                <input type="text" className="form-control add_subcat_name" placeholder="Sub Category" id={tmidx} name="sub_category_name" value={itemaddProductList.sub_cat} onChange={this.onChangeSubCategory} required />
                             </div>
                           </div>
                            
@@ -489,36 +574,54 @@ console.log(this.state.selected)
                          <div class="col-sm-6">
                            <div className="form-group">
                                <label>Sub Category Image:</label>
-                              <input type="file" className="form-control" id="sub_category_img" name="sub_category_img" onChange={this.onChangeSubCategoryImg} required />
+                              <input type="file" className="form-control add_subcat_img" id={tmidx} name="sub_category_img" onChange={this.onChangeSubCategoryImg} required />
                            </div>
                          </div>
                        </div>
                        <div class="row">
-                          <div class="col-sm-4">
+                          <div class="col-sm-3">
                             <div className="form-group">
                                 <label>Need Year?:</label>
                                {/* <input type="file" className="form-control" id="sub_category_img" name="sub_category_img" onChange={this.onChangeSubCategoryImg} required /> */}
                                </div>
                                </div>
-                               <div class="col-sm-4">
+                               <div class="col-sm-3">
                                <Checkbox
-							 
+							 id={tmidx}
               icon={icon}
               checkedIcon={checkedIcon}
               style={{ marginRight: 8 }}
 			  selectedId={this.state.selected}
-              
+              className="add_year"
 			  onChange = {this.Yearchecked}
             />
                             </div>
-                            
-                         <div class="col-sm-4">
+                            {(() => {
+				                       if(tmidx===this.state.addSubCatList.length-1){
+                                 return(
+                         <div class="col-sm-3">
                           <div className="form-group">
                                   <a class="text-success font-18" title="Add">
                                     <i class="fa fa-plus" onClick={this.handleAddSubCategory} ></i>
                                   </a>
                                 </div>
                                 </div>
+                                    )
+                                  }
+                                 })()}
+                                {(() => {
+				                       if(tmidx>0 &&tmidx===this.state.addSubCatList.length-1){
+                                 return(
+                                <div class="col-sm-3">
+                                <div className="form-group">
+                                  <a class="text-danger font-18" title="Remove">
+                                    <i class="fa fa-trash-o" onClick={() => this.handleRemoveSubCat(tmidx)} ></i>
+                                  </a>
+                                </div>
+                                </div>
+                                 )
+         }
+        })()}
                           </div>
                        </div>
                          // <div class="row" id={"add_pro_div_"+tmidx}>
